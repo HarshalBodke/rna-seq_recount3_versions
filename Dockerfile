@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install basic dependencies
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     wget \
     unzip \
@@ -51,19 +51,18 @@ RUN git clone --branch v1.3.3 --depth 1 https://github.com/deweylab/RSEM.git && 
     make && \
     mkdir -p /opt/rsem && \
     cp -r . /opt/rsem && \
-    ln -s /opt/rsem/rsem-calculate-expression /usr/local/bin/rsem-calculate-expression && \
-    ln -s /opt/rsem/rsem-prepare-reference /usr/local/bin/rsem-prepare-reference && \
-    ln -s /opt/rsem/rsem-bam2wig /usr/local/bin/rsem-bam2wig && \
-    ln -s /opt/rsem/rsem-sam-validator /usr/local/bin/rsem-sam-validator && \
+    ln -s /opt/rsem/* /usr/local/bin/ && \
     cd / && \
     rm -rf RSEM
 
 ENV PATH="/opt/rsem:$PATH"
+
 # ----------------------------
 # Verify installations
 # ----------------------------
 RUN fastqc --version && \
     STAR --version && \
+    samtools --version && \
     rsem-calculate-expression --version
 
 # Default working directory

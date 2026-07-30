@@ -48,10 +48,16 @@ RUN wget https://github.com/alexdobin/STAR/archive/refs/tags/2.7.3a.tar.gz && \
 RUN git clone --branch v1.3.3 --depth 1 https://github.com/deweylab/RSEM.git && \
     cd RSEM && \
     make && \
-    cp rsem-* /usr/local/bin/ && \
-    cd .. && \
+    mkdir -p /opt/rsem && \
+    cp -r . /opt/rsem && \
+    ln -s /opt/rsem/rsem-calculate-expression /usr/local/bin/rsem-calculate-expression && \
+    ln -s /opt/rsem/rsem-prepare-reference /usr/local/bin/rsem-prepare-reference && \
+    ln -s /opt/rsem/rsem-bam2wig /usr/local/bin/rsem-bam2wig && \
+    ln -s /opt/rsem/rsem-sam-validator /usr/local/bin/rsem-sam-validator && \
+    cd / && \
     rm -rf RSEM
 
+ENV PATH="/opt/rsem:$PATH"
 # ----------------------------
 # Verify installations
 # ----------------------------
